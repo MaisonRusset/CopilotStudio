@@ -1,0 +1,62 @@
+{
+  "schema": "1.0",
+  "name": "Calendar_Read_V2",
+  "version": "2.0.0",
+  "description": "Lister les événements du calendrier via Microsoft Graph",
+  "publisher": "MaisonRusset",
+  "authentication": {
+    "type": "OAuth2",
+    "provider": "Microsoft",
+    "delegated": true,
+    "resource": "https://graph.microsoft.com",
+    "scopes": [
+      "Calendars.Read"
+    ]
+  },
+  "actions": [
+    {
+      "name": "ListUpcomingEvents",
+      "description": "Retourne les événements à venir (top N)",
+      "method": "GET",
+      "urlTemplate": "https://graph.microsoft.com/v1.0/me/events?$top={top}&$orderby=start/dateTime&$select=id,subject,organizer,start,end,location",
+      "parameters": [
+        {
+          "name": "top",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "min": 1,
+          "max": 50
+        }
+      ],
+      "output": {
+        "type": "object",
+        "schema": {
+          "events": [
+            {
+              "id": "string",
+              "subject": "string",
+              "organizer": {
+                "emailAddress": {
+                  "name": "string",
+                  "address": "string"
+                }
+              },
+              "start": {
+                "dateTime": "string",
+                "timeZone": "string"
+              },
+              "end": {
+                "dateTime": "string",
+                "timeZone": "string"
+              },
+              "location": {
+                "displayName": "string"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

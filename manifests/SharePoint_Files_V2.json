@@ -1,0 +1,91 @@
+{
+  "schema": "1.0",
+  "name": "SharePoint_Files_V2",
+  "version": "2.0.0",
+  "description": "Lister les fichiers récents et d'un site SharePoint via Microsoft Graph",
+  "publisher": "MaisonRusset",
+  "authentication": {
+    "type": "OAuth2",
+    "provider": "Microsoft",
+    "delegated": true,
+    "resource": "https://graph.microsoft.com",
+    "scopes": [
+      "Files.Read",
+      "Sites.Read.All"
+    ]
+  },
+  "actions": [
+    {
+      "name": "ListRecentFiles",
+      "description": "Fichiers récemment utilisés (OneDrive)",
+      "method": "GET",
+      "urlTemplate": "https://graph.microsoft.com/v1.0/me/drive/recent?$top={top}",
+      "parameters": [
+        {
+          "name": "top",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "min": 1,
+          "max": 50
+        }
+      ],
+      "output": {
+        "type": "object",
+        "schema": {
+          "files": [
+            {
+              "id": "string",
+              "name": "string",
+              "webUrl": "string",
+              "lastModifiedDateTime": "string",
+              "size": "number"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "ListSiteDriveItems",
+      "description": "Lister les éléments d'une bibliothèque de documents d'un site SharePoint",
+      "method": "GET",
+      "urlTemplate": "https://graph.microsoft.com/v1.0/sites/{siteId}/drive/root/children?$top={top}",
+      "parameters": [
+        {
+          "name": "siteId",
+          "type": "string",
+          "required": true,
+          "description": "ID du site SharePoint (ex. {hostname},{site-id},{web-id})"
+        },
+        {
+          "name": "top",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "min": 1,
+          "max": 100
+        }
+      ],
+      "output": {
+        "type": "object",
+        "schema": {
+          "items": [
+            {
+              "id": "string",
+              "name": "string",
+              "webUrl": "string",
+              "folder": {
+                "childCount": "number"
+              },
+              "file": {
+                "mimeType": "string"
+              },
+              "lastModifiedDateTime": "string",
+              "size": "number"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

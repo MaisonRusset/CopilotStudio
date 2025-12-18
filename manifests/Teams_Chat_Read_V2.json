@@ -1,0 +1,88 @@
+{
+  "schema": "1.0",
+  "name": "Teams_Chat_Read_V2",
+  "version": "2.0.0",
+  "description": "Lire les chats de l'utilisateur et leurs messages via Microsoft Graph",
+  "publisher": "MaisonRusset",
+  "authentication": {
+    "type": "OAuth2",
+    "provider": "Microsoft",
+    "delegated": true,
+    "resource": "https://graph.microsoft.com",
+    "scopes": [
+      "Chat.Read"
+    ]
+  },
+  "actions": [
+    {
+      "name": "ListUserChats",
+      "description": "Lister les chats de l'utilisateur",
+      "method": "GET",
+      "urlTemplate": "https://graph.microsoft.com/v1.0/me/chats?$top={top}",
+      "parameters": [
+        {
+          "name": "top",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "min": 1,
+          "max": 50
+        }
+      ],
+      "output": {
+        "type": "object",
+        "schema": {
+          "chats": [
+            {
+              "id": "string",
+              "topic": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "ListChatMessages",
+      "description": "Lire les messages d'un chat par ID",
+      "method": "GET",
+      "urlTemplate": "https://graph.microsoft.com/v1.0/chats/{chatId}/messages?$top={top}&$orderby=createdDateTime desc",
+      "parameters": [
+        {
+          "name": "chatId",
+          "type": "string",
+          "required": true,
+          "description": "ID du chat (provenant de ListUserChats)"
+        },
+        {
+          "name": "top",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "min": 1,
+          "max": 50
+        }
+      ],
+      "output": {
+        "type": "object",
+        "schema": {
+          "messages": [
+            {
+              "id": "string",
+              "from": {
+                "user": {
+                  "id": "string",
+                  "displayName": "string"
+                }
+              },
+              "createdDateTime": "string",
+              "body": {
+                "contentType": "string",
+                "content": "string"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
