@@ -1,0 +1,22 @@
+
+{
+  "schema": "1.0",
+  "name": "Ping_V1",
+  "version": "1.0.0",
+  "description": "Test de manifeste minimal",
+  "publisher": "MaisonRusset",
+  "authentication": {
+    "type": "OAuth2",
+    "provider": "Microsoft",
+    "delegated": true,
+    "resource": "https://graph.microsoft.com",
+    "scopes": ["User.Read"]
+  },
+  "actions": [
+    {
+      "name": "MeProfile",
+           "description": "Récupère le profil utilisateur",
+      "method": "GET",
+      "urlTemplate": "https://graph.microsoft.com/v1.0/me?$select=id,displayName,userPrincipalName"
+    }
+  ]
